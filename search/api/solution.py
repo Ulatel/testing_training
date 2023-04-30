@@ -10,6 +10,8 @@ class Solution:
         if  target>10000 or target<-10000:
             raise ValueError
         
+        if  len(nums)!=len(set(nums)):
+            raise ValueError
         l, r = 0, len(nums) - 1
 
         while l <= r:
