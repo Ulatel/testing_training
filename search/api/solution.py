@@ -4,7 +4,7 @@ class Solution:
         if len(nums)<1 or len(nums)>5000:
             raise ValueError
         
-        if  max(nums)>10000:
+        if  max(nums)>10000 or min(nums)<-10000:
             raise ValueError
         
         l, r = 0, len(nums) - 1
