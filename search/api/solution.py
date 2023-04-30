@@ -7,6 +7,9 @@ class Solution:
         if  max(nums)>10000 or min(nums)<-10000:
             raise ValueError
         
+        if  target>10000 or target<-10000:
+            raise ValueError
+        
         l, r = 0, len(nums) - 1
 
         while l <= r:
