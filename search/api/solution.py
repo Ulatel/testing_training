@@ -1,6 +1,8 @@
 
 class Solution:
     def search(self, nums: list[int], target: int) -> int:
+        if len(nums)<1:
+            raise ValueError
         l, r = 0, len(nums) - 1
 
         while l <= r:
