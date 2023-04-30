@@ -1,6 +1,10 @@
 
 class Solution:
     def search(self, nums: list[int], target: int) -> int:
+        for num in nums:
+            if type(num)!=int:
+                raise TypeError
+
         if len(nums)<1 or len(nums)>5000:
             raise ValueError
         
