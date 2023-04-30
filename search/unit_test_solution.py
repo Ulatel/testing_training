@@ -177,23 +177,13 @@ class TestSolution(TestCase):
 
 ################################
     # nums is array is not integer
-    def test_solutoin_string_values_in_nums_error(self):
-        sut = Solution()
-        parametrs = [
-            [[3, 's', 5, 6, 1, 2], 10],
-            [[3, 4.5, 5, 6, 1, 2], 10],
-            [[3, True, 5, 6, 1, 2], 10]
-        ]
-        for nums, target in parametrs:
-            with self.assertRaises(ValueError):
-                sut.search(nums, target)
 
     def test_solutoin_string_values_in_nums_error(self):
         sut = Solution()
         nums = [3, 's', 5, 6, 1, 2]
         parametrs = [10, 's', 'a', 5, 1]
         for target in parametrs:
-            with self.assertRaises(ValueError):
+            with self.assertRaises(TypeError):
                 sut.search(nums, target)
 
     def test_solutoin_float_values_in_nums_error(self):
@@ -201,7 +191,7 @@ class TestSolution(TestCase):
         nums = [3, 4.5, 5, 6, 1, 2]
         parametrs = [10, 4.5, 5.4, 1]
         for target in parametrs:
-            with self.assertRaises(ValueError):
+            with self.assertRaises(TypeError):
                 sut.search(nums, target)
 
     def test_solutoin_bool_values_in_nums_error(self):
@@ -209,7 +199,7 @@ class TestSolution(TestCase):
         nums = [3, True, 5, 6, 1, 2]
         parametrs = [10, True, 3]
         for target in parametrs:
-            with self.assertRaises(ValueError):
+            with self.assertRaises(TypeError):
                 sut.search(nums, target)
 
 
