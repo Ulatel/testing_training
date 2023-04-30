@@ -150,11 +150,14 @@ class TestSolution(TestCase):
 
     def test_solutoin_target_out_of_range_error(self):
         sut = Solution()
+        nums = [-888, 100, 1000, -1000, -999]
         parametrs = [
-            [[-888, 100, -1000, -999], -10001],
-            [[20, 999, 1000, 10, 11], 10001]
+            10001,
+            1000000,
+            -10001, 
+            -1110000
         ]
-        for nums, target in parametrs:
+        for target in parametrs:
             with self.assertRaises(ValueError):
                 sut.search(nums, target)
 
