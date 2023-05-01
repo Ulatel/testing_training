@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Добро пожаловать в сортировальню {% endblock %}</h1>
+    {% for array in arrays %}
+        <a href="{{ url_for('array', array_id=array['id']) }}">
+            <h2>{{ array['title'] }}</h2>
+        </a>
+        <span class="badge badge-primary">{{ array['created'] }}</span>
+        
+        <a href="{{ url_for('edit', id=array['id']) }}">
+            <span class="badge badge-warning">Редактировать</span>
+        </a>
+        
+        <form action="{{ url_for('delete', id=array['id']) }}" method="POST">
+            <input type="submit" value="Удалить"
+                    class="btn btn-danger btn-sm"
+                    onclick="return confirm('Ты действительно хочешь удалить этот великолепный массив?')">
+        </form>
+        <hr>
+        
+        
+    {% endfor %}
+    
+{% endblock %}

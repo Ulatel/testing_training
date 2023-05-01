@@ -2,5 +2,15 @@
     "python.analysis.extraPaths": [
         "./search/api",
         "./search"
-    ]
+    ],
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        ".",
+        "-p",
+        "*_test_*.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true,
+    "python.analysis.typeCheckingMode": "basic"
 }
