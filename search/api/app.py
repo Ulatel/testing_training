@@ -1,4 +1,6 @@
 import sqlite3
+import traceback
+import logging
 from solution import Solution
 from flask import Flask, render_template, request, url_for, flash, redirect
 '''Глобальный объект request для доступа к входящим данным запроса, которые будут подаваться через форму HTML.
@@ -17,8 +19,8 @@ def get_array(array_id):
     array = conn.execute('SELECT * FROM arrays WHERE id = ?',
                         (array_id,)).fetchone()
     conn.close()
-    if array is None:
-        abort(404)
+    #if array is None:
+    #    abort(404)
     return array
 
 app = Flask(__name__)
@@ -33,10 +35,21 @@ def index():
     return render_template('index.html', arrays=arrays)
 
 
-@app.route('/<int:array_id>')
+@app.route('/<int:array_id>', methods=('GET', 'POST'))
 def array(array_id):
     array = get_array(array_id)
-    return render_template('array.html', array=array)
+    target_pos = 0
+    try:
+        if request.method == 'POST':
+            target = int(request.form['target'])
+            nums=[int(item) for item in array['content'].split()]
+            sol = Solution()
+            target_pos = sol.search(nums, target)
+    except  BaseException as error:
+        print('An exception occurred: {}'.format(error.with_traceback))
+        #logging.error(traceback.format_exc())
+        
+    return render_template('array.html', array=array, target_pos = target_pos)
 
 
 @app.route('/create', methods=('GET', 'POST'))
@@ -74,7 +87,8 @@ def edit(id):
                          (title, content, id))
             conn.commit()
             conn.close()
-            return redirect(url_for('index'))
+            array = get_array(id)
+            return render_template('array.html', array=array)
 
     return render_template('edit.html', array=array)
 
@@ -87,6 +101,22 @@ def delete(id):
     conn.close()
     flash('"{}" was successfully deleted!'.format(array['title']))
     return redirect(url_for('index'))
+
+
+
+
+"""@app.route('/solution')
+def solution(id):
+    array = get_array(id)
+    conn = get_db_connection()
+    arrays = conn.execute('SELECT * FROM arrays').fetchall()
+    conn.close()
+    nums=[int(item) for item in "1 2 3".split()]
+    target = 2
+    sol = Solution()
+    target_pos = sol.search(nums, target)
+    print(target_pos)
+    return render_template('array.html', array=array, target_pos = target_pos)"""
 
 if __name__ == '__main__':
     app.run(debug=True)
