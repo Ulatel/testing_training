@@ -28,7 +28,7 @@ class TestSolution(TestCase):
         for target, answer in parametrs:
             self.assertEqual(sut.search(nums, target), answer)
 
-    def test_solutoin_nums_length_in_range(self):
+    def test_solutoin_nums_length_out_of_range(self):
         sut = Solution()
         nums = list(range(10, 5000+1))+list(range(1, 10))
         parametrs = [

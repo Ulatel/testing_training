@@ -46,6 +46,7 @@ def array(array_id):
             sol = Solution()
             target_pos = sol.search(nums, target)
     except  BaseException as error:
+        flash(repr(error))
         print('An exception occurred: {}'.format(error.with_traceback))
         #logging.error(traceback.format_exc())
         
@@ -54,19 +55,26 @@ def array(array_id):
 
 @app.route('/create', methods=('GET', 'POST'))
 def create():
-    if request.method == 'POST':
-        title = request.form['title']
-        content = request.form['content']
+    try:
+        if request.method == 'POST':
+            print(request.form['title'])
+            title = request.form['title']
+            content = request.form['content']
 
-        if not title:
-            flash('Title is required!')
-        else:
-            conn = get_db_connection()
-            conn.execute('INSERT INTO arrays (title, content) VALUES (?, ?)',
-                         (title, content))
-            conn.commit()
-            conn.close()
-            return redirect(url_for('index'))
+            if not title:
+                flash('Title is required!')
+            else:
+                conn = get_db_connection()
+                conn.execute('INSERT INTO arrays (title, content) VALUES (?, ?)',
+                            (title, content))
+                conn.commit()
+                conn.close()
+                return redirect(url_for('index'))
+    except  BaseException as error:
+        flash(repr(error))
+        print('An exception occurred: {}'.format(error.with_traceback))
+        #logging.error(traceback.format_exc())
+        raise error
 
     return render_template('create.html')
 
