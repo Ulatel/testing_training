@@ -37,7 +37,7 @@ def index():
         conn.close()
         return render_template('index.html', arrays=arrays)
     except Exception as error:
-        raise 
+         
         abort(500)
 
 
@@ -56,7 +56,7 @@ def array(array_id):
     except Exception as error:
         flash(repr(error))
         print('An exception occurred: {}'.format(error.with_traceback))
-        raise 
+         
         abort(500)
         raise
     return render_template('array.html', array=array, target_pos = target_pos)
@@ -111,7 +111,7 @@ def create():
         flash(repr(error))
         print('An exception occurred: {}'.format(error.with_traceback))
         #logging.error(traceback.format_exc())
-        raise 
+         
         abort(500)
         #raise
 
@@ -140,7 +140,7 @@ def edit(id):
         flash(repr(error))
         print('An exception occurred: {}'.format(error.with_traceback))
         #logging.error(traceback.format_exc())
-        raise 
+         
         abort(500)
         raise 
 
@@ -161,7 +161,7 @@ def delete(id):
         flash(repr(error))
         print('An exception occurred: {}'.format(error.with_traceback))
         abort(500)
-        raise error
+        raise 
     return redirect(url_for('index'))
 
 
