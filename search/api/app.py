@@ -89,7 +89,10 @@ def create():
                 if all(nums[i] <= nums[i+1] for i in range(nums.index(min(nums)) - 1)) != True or  all(nums[j] <= nums[j+1] for j in range(nums.index(min(nums)), len(nums)-1)) != True:
                     raise ValueError
 
-                if len(nums) < 1 or len(nums) > 5000:
+                if len(nums) < 1 :
+                    raise ValueError
+                
+                if  len(nums) > 5000:
                     raise ValueError
 
                 if max(nums) > 10000 or min(nums) < -10000:
