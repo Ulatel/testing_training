@@ -9,6 +9,8 @@ from flask import Flask, render_template, request, url_for, flash, redirect
 Функция redirect() для перенаправления клиента в другое расположение.'''
 from werkzeug.exceptions import abort #Для ответа в виде страницы 404
 
+
+
 def get_db_connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
@@ -29,35 +31,94 @@ app.config['SECRET_KEY'] = 'SSSEKRRET1234KEY'
 
 @app.route('/')
 def index():
-    conn = get_db_connection()
-    arrays = conn.execute('SELECT * FROM arrays').fetchall()
-    conn.close()
-    return render_template('index.html', arrays=arrays)
+    try:
+        conn = get_db_connection()
+        arrays = conn.execute('SELECT * FROM arrays').fetchall()
+        conn.close()
+        return render_template('index.html', arrays=arrays)
+    except Exception as error:
+        raise 
+        abort(500)
 
 
 @app.route('/<int:array_id>', methods=('GET', 'POST'))
 def array(array_id):
-    array = get_array(array_id)
+    array = get_array(array_id) 
     target_pos = 0
     try:
         if request.method == 'POST':
             target = int(request.form['target'])
+            #print(target)
             nums=[int(item) for item in array['content'].split()]
             sol = Solution()
             target_pos = sol.search(nums, target)
-    except  BaseException as error:
+            
+    except Exception as error:
         flash(repr(error))
         print('An exception occurred: {}'.format(error.with_traceback))
+        raise 
+        abort(500)
+        raise
+    return render_template('array.html', array=array, target_pos = target_pos)
         #logging.error(traceback.format_exc())
         
-    return render_template('array.html', array=array, target_pos = target_pos)
+    
 
 
 @app.route('/create', methods=('GET', 'POST'))
 def create():
     try:
         if request.method == 'POST':
-            print(request.form['title'])
+            #print(request.form['title'])
+            title = request.form['title']
+            content = request.form['content']
+
+            if not title:
+                flash('Title is required!')
+            elif not content:
+                flash('Content is required!')
+            else:
+                nums = []
+                for num in content.split():
+                    try:
+                        a = int(num)
+                    except TypeError as error:
+                        raise 
+                    nums.append(a)
+
+                if all(nums[i] <= nums[i+1] for i in range(nums.index(min(nums)) - 1)) != True or  all(nums[j] <= nums[j+1] for j in range(nums.index(min(nums)), len(nums)-1)) != True:
+                    raise ValueError
+
+                if len(nums) < 1 or len(nums) > 5000:
+                    raise ValueError
+
+                if max(nums) > 10000 or min(nums) < -10000:
+                    raise ValueError
+                
+                if len(nums) != len(set(nums)):
+                    raise ValueError
+                
+                conn = get_db_connection()
+                conn.execute('INSERT INTO arrays (title, content) VALUES (?, ?)',
+                            (title, content))
+                conn.commit()
+                conn.close()
+                return redirect(url_for('index'))
+    except  Exception as error:
+        flash(repr(error))
+        print('An exception occurred: {}'.format(error.with_traceback))
+        #logging.error(traceback.format_exc())
+        raise 
+        abort(500)
+        #raise
+
+    return render_template('create.html')
+
+@app.route('/<int:id>/edit', methods=('GET', 'POST'))
+def edit(id):
+    try:
+        array = get_array(id)
+        if request.method == 'POST':
             title = request.form['title']
             content = request.form['content']
 
@@ -65,51 +126,40 @@ def create():
                 flash('Title is required!')
             else:
                 conn = get_db_connection()
-                conn.execute('INSERT INTO arrays (title, content) VALUES (?, ?)',
-                            (title, content))
+                conn.execute('UPDATE arrays SET title = ?, content = ?'
+                            ' WHERE id = ?',
+                            (title, content, id))
                 conn.commit()
                 conn.close()
-                return redirect(url_for('index'))
-    except  BaseException as error:
+                array = get_array(id)
+                return render_template('array.html', array=array)
+    except  Exception  as error:
         flash(repr(error))
         print('An exception occurred: {}'.format(error.with_traceback))
         #logging.error(traceback.format_exc())
-        raise error
-
-    return render_template('create.html')
-
-@app.route('/<int:id>/edit', methods=('GET', 'POST'))
-def edit(id):
-    array = get_array(id)
-
-    if request.method == 'POST':
-        title = request.form['title']
-        content = request.form['content']
-
-        if not title:
-            flash('Title is required!')
-        else:
-            conn = get_db_connection()
-            conn.execute('UPDATE arrays SET title = ?, content = ?'
-                         ' WHERE id = ?',
-                         (title, content, id))
-            conn.commit()
-            conn.close()
-            array = get_array(id)
-            return render_template('array.html', array=array)
+        raise 
+        abort(500)
+        raise 
 
     return render_template('edit.html', array=array)
 
+
+
 @app.route('/<int:id>/delete', methods=('POST',))
 def delete(id):
-    array = get_array(id)
-    conn = get_db_connection()
-    conn.execute('DELETE FROM arrays WHERE id = ?', (id,))
-    conn.commit()
-    conn.close()
-    flash('"{}" was successfully deleted!'.format(array['title']))
+    try:
+        array = get_array(id)
+        conn = get_db_connection()
+        conn.execute('DELETE FROM arrays WHERE id = ?', (id,))
+        conn.commit()
+        conn.close()
+        flash('"{}" was successfully deleted!'.format(array['title']))
+    except  Exception  as error:
+        flash(repr(error))
+        print('An exception occurred: {}'.format(error.with_traceback))
+        abort(500)
+        raise error
     return redirect(url_for('index'))
-
 
 
 

@@ -18,7 +18,7 @@ class TestSolution(TestCase):
 
 ################################
     # 1 <= nums.length <= 5000
-    def test_solutoin_nums_length_in_range(self):
+    def test_solution_nums_length_in_range(self):
         sut = Solution()
         nums = [2]
         parametrs = [
@@ -28,7 +28,7 @@ class TestSolution(TestCase):
         for target, answer in parametrs:
             self.assertEqual(sut.search(nums, target), answer)
 
-    def test_solutoin_nums_length_out_of_range(self):
+    def test_solution_nums_length_out_of_range(self):
         sut = Solution()
         nums = list(range(10, 5000+1))+list(range(1, 10))
         parametrs = [
@@ -39,7 +39,7 @@ class TestSolution(TestCase):
             self.assertEqual(sut.search(nums, target), answer)
     # Errors
 
-    def test_solutoin_nums_length_out_of_range_min_error(self):
+    def test_solution_nums_length_out_of_range_min_error(self):
         sut = Solution()
         nums = []
         parametrs = [
@@ -51,7 +51,7 @@ class TestSolution(TestCase):
             with self.assertRaises(ValueError):
                 sut.search(nums, target)
 
-    def test_solutoin_nums_length_out_of_range_max_error(self):
+    def test_solution_nums_length_out_of_range_max_error(self):
         sut = Solution()
         nums = list(range(10, 5001+1))+list(range(1, 10))
         parametrs = [
@@ -69,7 +69,7 @@ class TestSolution(TestCase):
     # -10^4 <= nums[i] <= 10^4
 
 
-    def test_solutoin_nums_value_in_range_min(self):
+    def test_solution_nums_value_in_range_min(self):
         sut = Solution()
         nums = [-8888, 100, -10000, -9999]  # minimum
         parametrs = [
@@ -81,7 +81,7 @@ class TestSolution(TestCase):
         for target, answer in parametrs:
             self.assertEqual(sut.search(nums, target), answer)
 
-    def test_solutoin_nums_value_in_range_max(self):
+    def test_solution_nums_value_in_range_max(self):
         sut = Solution()
         nums = [20, 9999, 10000, 10, 11]  # maximum
         parametrs = [
@@ -94,7 +94,7 @@ class TestSolution(TestCase):
 
     # Errors
 
-    def test_solutoin_nums_value_out_of_range_min_error(self):
+    def test_solution_nums_value_out_of_range_min_error(self):
         sut = Solution()
         nums = [-8888, 100, -10001, -9999]
         parametrs = [
@@ -106,7 +106,7 @@ class TestSolution(TestCase):
             with self.assertRaises(ValueError):
                 sut.search(nums, target)
 
-    def test_solutoin_nums_value_out_of_range_max_error(self):
+    def test_solution_nums_value_out_of_range_max_error(self):
         sut = Solution()
         nums = [20, 9999, 10001, 10, 11]
         parametrs = [
@@ -125,7 +125,7 @@ class TestSolution(TestCase):
     # -10^4 <= target <= 10^4
 
 
-    def test_solutoin_target_in_range_min(self):
+    def test_solution_target_in_range_min(self):
         sut = Solution()
         nums = [-8888, 100, -10000, -9999]
         parametrs = [
@@ -135,7 +135,7 @@ class TestSolution(TestCase):
         for target, answer in parametrs:
             self.assertEqual(sut.search(nums, target), answer)
 
-    def test_solutoin_target_in_range_max(self):
+    def test_solution_target_in_range_max(self):
         sut = Solution()
         nums = [20, 9999, 10000, 10, 11]
         parametrs = [
@@ -148,7 +148,7 @@ class TestSolution(TestCase):
 
     # Errors
 
-    def test_solutoin_target_out_of_range_error(self):
+    def test_solution_target_out_of_range_error(self):
         sut = Solution()
         nums = [-888, 100, 1000, -1000, -999]
         parametrs = [
@@ -166,14 +166,14 @@ class TestSolution(TestCase):
     # All values of nums are unique
 
 
-    def test_solutoin_non_unique_value_target_in_array_error(self):
+    def test_solution_non_unique_value_target_in_array_error(self):
         sut = Solution()
         with self.assertRaises(ValueError):
             sut.search([3, 4, 4, 5, 6, 1, 2], 10)
 
 ################################
     # nums is an ascending array that is possibly rotated
-    def test_solutoin_non_sorted_values_in_nums_error(self):
+    def test_solution_non_sorted_values_in_nums_error(self):
         sut = Solution()
         with self.assertRaises(ValueError):
             sut.search([3, 7, 4, 5, 6, 1, 2], 10)
@@ -181,7 +181,7 @@ class TestSolution(TestCase):
 ################################
     # nums is array is not integer
 
-    def test_solutoin_string_values_in_nums_error(self):
+    def test_solution_string_values_in_nums_error(self):
         sut = Solution()
         nums = [3, 's', 5, 6, 1, 2]
         parametrs = [10, 's', 'a', 5, 1]
@@ -189,7 +189,7 @@ class TestSolution(TestCase):
             with self.assertRaises(TypeError):
                 sut.search(nums, target)
 
-    def test_solutoin_float_values_in_nums_error(self):
+    def test_solution_float_values_in_nums_error(self):
         sut = Solution()
         nums = [3, 4.5, 5, 6, 1, 2]
         parametrs = [10, 4.5, 5.4, 1]
@@ -197,7 +197,7 @@ class TestSolution(TestCase):
             with self.assertRaises(TypeError):
                 sut.search(nums, target)
 
-    def test_solutoin_bool_values_in_nums_error(self):
+    def test_solution_bool_values_in_nums_error(self):
         sut = Solution()
         nums = [3, True, 5, 6, 1, 2]
         parametrs = [10, True, 3]
