@@ -25,46 +25,100 @@ def insert_into_db(id, target, value):
 
 
 class TestClass:
-    '''
-    def setup_module(self):
+
+    def setup_module(cls):
         print("Выполнение метода Setup_module")
 
     def teardown_module(self):
         print("Выполнение метода Teardown_module")
 
+
+####GET LISTS FORM TEST
     def test_get_form_get_list_http_status_code(self):
         assert get_array_list().status_code == 200
 
-    def test_post_form_create_http_status_code(self):
+
+####CREATE ARRAY FORM TESTS
+    def test_post_create_form_http_status_code(self):
         assert post_create_array(title="test1", content="1 2 3").status_code == 200
 
     def test_post_null_form_http_status_code(self):
         assert post_create_array(title=None, content=None).status_code == 500
+        assert post_create_array(title="Test2", content=None).status_code == 500
+        assert post_create_array(title=None, content="1 2 3").status_code == 500
+    
+    def test_post_create_form_non_unique_value_target_in_array_error(self):
+        nums = [
+            "1 1 2 3 4 5",
+            "1 2 2 3 4 5",
+            "4 5 6 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2",
+            "1 1",
+        ]
+        for num in nums:
+            assert post_create_array(title="test2", content=num).status_code == 500
 
-#???
+    def test_post_create_form_non_sorted_values_in_nums_error(self):
+        nums = [
+            "1 2 3 1 2 3 1 2 3",
+            "3 4 5 0 999 123 1 2 0",
+        ]
+        for num in nums:
+            assert post_create_array(title="test3", content=num).status_code == 500
+
+
+    def test_post_create_form_nums_value_out_of_range_http_status_code(self):
+        nums = [
+            "10000000 0 1",
+            "-10000000 0 1",
+            " "
+        ]
+        nums_int = list(range(10, 50001+1))+list(range(1, 10))
+        nums_long = ""
+        for num in nums_int:
+            nums_long += str(num)+" "
+        nums.append(nums_long)
+
+        for num in nums:
+            assert post_create_array(title="test4", content=num).status_code == 500
+
+    def test_post_create_form_nums_value_not_int_http_status_code(self):
+        nums = [
+            "10 0 s 1",
+            "10 0 2.4 1",
+            "-10 0 True 1",
+            "a b c d",
+        ]
+        
+        for num in nums:
+            assert post_create_array(title="test5", content=num).status_code == 500
+
+####DELETE ARRAY FORM TESTS
     def test_post_form_edit_http_status_code(self):
-        id = '299'
-        insert_into_db(id = id, target = "test2", value="1 2 3")
-        assert post_edit_array(id=id, title="test2_edit",
+        id = '306'
+        insert_into_db(id = id, target = "test6", value="1 2 3")
+        assert post_edit_array(id=id, title="test6_edit",
                                content="0 1 2 3").status_code == 200
         post_delete_array(id=id)
-#???
+
     def test_post_form_delete_http_status_code(self):
-        id = '300'
-        insert_into_db(id = id,  target ="test3", value="1 2 3")
+        id = '307'
+        insert_into_db(id = id,  target ="test7", value="1 2 3")
         assert post_delete_array(id=id).status_code == 200
 
     def test_post_form_delete_deleted_post_http_status_code(self):
-        id = '301'
+        id = '308'
         assert post_delete_array(id=id).status_code == 500
 
     def test_post_form_delete_uncorrect_id_post_http_status_code(self):
         id = '-3'
         assert post_delete_array(id=id).status_code == 404
 
+
+####ARRAY TARGET FORM TESTS
+
     def test_id_post_http_status_code(self):
-        id = '302'
-        insert_into_db(id, "test4", "4 5 6 7 0 1 2")
+        id = '309'
+        insert_into_db(id, "test9", "4 5 6 7 0 1 2")
         parametrs = ['0', '3', '1']
         for target in parametrs:
             assert post_pos_target_in_array(id=id, target = target).status_code == 200
@@ -74,16 +128,16 @@ class TestClass:
         nums = ''
         for i in nums_int:
             nums += str(i)+" "
-        id = 303
-        insert_into_db(id, "test5", nums)
+        id = 310
+        insert_into_db(id, "test10", nums)
         parametrs = ['100', '-100']
         for target in parametrs:
             assert post_pos_target_in_array(id=id, target = target).status_code == 500
 
     def test_id_post_nums_double_error_http_status_code(self):
         nums = "1 1"
-        id = 304
-        insert_into_db(id, "test6", nums)
+        id = 311
+        insert_into_db(id, "test11", nums)
         parametrs = [
             10,
             -1,
@@ -100,8 +154,8 @@ class TestClass:
             -1,
             100,
         ]
-        id = 305
-        insert_into_db(id, "test7", nums)
+        id = 312
+        insert_into_db(id, "test12", nums)
         for target in parametrs:
             assert post_pos_target_in_array(id=id, target = target).status_code == 500
 
@@ -115,24 +169,25 @@ class TestClass:
             -100,
             100
             ]
-        id = 306
-        insert_into_db(id, "test8", nums)
+        id = 313
+        insert_into_db(id, "test13", nums)
         for target in parametrs:
             assert post_pos_target_in_array(id=id, target = target).status_code == 500
 
+###range tests for target
     def test_id_post_nums_value_in_range_min_http_status_code(self):
         nums = "-8888 100 10000 -9999"
         parametrs = [100, -8888, 9999, 1]
-        id = 310
-        insert_into_db(id, "test10", nums)
+        id = 314
+        insert_into_db(id, "test14", nums)
         for target in parametrs:
             assert post_pos_target_in_array(id=id, target = target).status_code == 200
         
     def test_id_post_nums_value_in_range_max_http_status_code(self):
         nums = "-8888 100 -10000 -9999"
         parametrs = [100, -8888, 9999, 1]
-        id = 311
-        insert_into_db(id, "test11", nums)
+        id = 315
+        insert_into_db(id, "test15", nums)
         for target in parametrs:
             assert post_pos_target_in_array(id=id, target = target).status_code == 200
 
@@ -140,24 +195,24 @@ class TestClass:
     def test_id_post_nums_value_out_of_range_min_http_status_code(self):
         nums = "-8888 100 10001 -9999"
         parametrs = [100, -8888, 9999, 1]
-        id = 312
-        insert_into_db(id, "test12", nums)
+        id = 316
+        insert_into_db(id, "test16", nums)
         for target in parametrs:
             assert post_pos_target_in_array(id=id, target = target).status_code == 500
 
     def test_id_post_nums_value_out_of_range_max_http_status_code(self):
         nums = "-8888 100 -10001 -9999"
         parametrs = [100, -8888, 9999, 1]
-        id = 313
-        insert_into_db(id, "test13", nums)
+        id = 317
+        insert_into_db(id, "test17", nums)
         for target in parametrs:
             assert post_pos_target_in_array(id=id, target = target).status_code == 500
 
     def test_id_post_targer_in_range_http_status_code(self):
         nums = "-8888 100 10000 -10000"
         parametrs = [10000, -10000]
-        id = 314
-        insert_into_db(id, "test14", nums)
+        id = 318
+        insert_into_db(id, "test18", nums)
         for target in parametrs:
             assert post_pos_target_in_array(id=id, target = target).status_code == 200
         
@@ -165,97 +220,12 @@ class TestClass:
     def test_id_post_targer_out_of_range_http_status_code(self):
         nums = "-8888 100 10000 -9999"
         parametrs = [100000, -1000000, 9999999]
-        id = 315
-        insert_into_db(id, "test15", nums)
+        id = 319
+        insert_into_db(id, "test19", nums)
         for target in parametrs:
             assert post_pos_target_in_array(id=id, target = target).status_code == 500
 
-    def test_post_create_form_non_unique_value_target_in_array_error(self):
-        nums = [
-            "1 1 2 3 4 5",
-            "1 2 2 3 4 5",
-            "4 5 6 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2",
-            "1 1",
-        ]
-        for num in nums:
-            assert post_create_array(title="test16", content=num).status_code == 500
-
-    def test_post_create_form_non_sorted_values_in_nums_error(self):
-        nums = [
-            "1 2 3 1 2 3 1 2 3",
-            "3 4 5 0 999 123 1 2 0",
-        ]
-        for num in nums:
-            assert post_create_array(title="test17", content=num).status_code == 500
-    '''
-
-    def test_post_create_form_nums_value_out_of_range_http_status_code(self):
-        nums = [
-            "10000000 0 1",
-            "-10000000 0 1",
-            " "
-        ]
-        nums_int = list(range(10, 50001+1))+list(range(1, 10))
-        nums_long = ""
-        for num in nums_int:
-            nums_long += str(num)+" "
-        nums.append(nums_long)
-
-        for num in nums:
-            assert post_create_array(title="test18", content=num).status_code == 500
-'''
-    def test_post_create_form_nums_value_in_range_http_status_code(self):
-        nums = [
-            "10000 0 1",
-            "-10000 0 1",
-            "1"
-        ]
-        nums_int = list(range(10, 5000+1))+list(range(1, 10))
-        nums_long = ""
-        for num in nums_int:
-            nums_long += str(num)+" "
-        nums.append(nums_long)
-
-        for num in nums:
-            assert post_create_array(title="test18", content=num).status_code == 200
-
-    
-
-   
 
 
-
-################################
-    # nums is array is not integer
-
-    def test_id_post_string_values_in_nums_error(self):
-        sut = Solution()
-        nums = [3, 's', 5, 6, 1, 2]
-        parametrs = [10, 's', 'a', 5, 1]
-        for target in parametrs:
-            with self.assertRaises(TypeError):
-                sut.search(nums, target)
-
-    def test_id_post_float_values_in_nums_error(self):
-        sut = Solution()
-        nums = [3, 4.5, 5, 6, 1, 2]
-        parametrs = [10, 4.5, 5.4, 1]
-        for target in parametrs:
-            with self.assertRaises(TypeError):
-                sut.search(nums, target)
-
-    def test_id_post_bool_values_in_nums_error(self):
-        sut = Solution()
-        nums = [3, True, 5, 6, 1, 2]
-        parametrs = [10, True, 3]
-        for target in parametrs:
-            with self.assertRaises(TypeError):
-                sut.search(nums, target)
-
-
-if __name__ == "__main__":
-    unittest.main()
-
-    '''
 if __name__ == "__main__":
     pytest.main()
