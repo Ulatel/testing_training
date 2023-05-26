@@ -1,5 +1,6 @@
 from unittest import TestCase
 import unittest
+from selenium import webdriver
 from api.solution import Solution
 
 

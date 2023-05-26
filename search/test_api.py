@@ -26,7 +26,7 @@ def insert_into_db(id, target, value):
 
 class TestClass:
 
-    def setup_module(cls):
+    def setup_module(self):
         print("Выполнение метода Setup_module")
 
     def teardown_module(self):
@@ -227,5 +227,5 @@ class TestClass:
 
 
 
-if __name__ == "__main__":
-    pytest.main()
+"""if __name__ == "__main__":
+    pytest.main()"""
