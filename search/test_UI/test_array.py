@@ -1,36 +1,88 @@
 import time
+import pytest
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 
-def wait_of_element_located(id, driver):
+
+def wait_of_element_located(by, value, driver):
     element = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located(
-            (By.ID, id)
+            (by, value)
         )
     )
     return element
 
-def test_open_array():
-    options = webdriver.ChromeOptions()
-    options.add_experimental_option("excludeSwitches", ["enable-logging"])
-    driver = webdriver.Chrome(options=options, executable_path=r'C:/Users/.../.../chromedriver.exe')
-    driver.get("http://127.0.0.1:5000")
 
-     # Поиск и ождиание прогрузки ссылки элемента товара магазина и клик по ссылке
-    item_name = wait_of_element_located(id='1', driver=driver)
-    item_name.click()
+class TestClass:
+    def setup_class(self):
+        options = webdriver.ChromeOptions()
+        options.add_experimental_option("excludeSwitches", ["enable-logging"])
+        options = webdriver.ChromeOptions()
+        options.add_argument('--ignore-certificate-errors')
+        options.add_argument('--ignore-ssl-errors')
+        s = Service('C:/Users/.../.../chromedriver.exe')
+        self.driver = webdriver.Chrome(options=options, service=s)
+    
+    
+        
+    def teardown_class(self):
+        self.driver.close()
 
-    title_text = driver.find_element(by = By.CSS_SELECTOR, value="h2")
-    assert title_text.text=="First array"
+    def test_open_array(self):
+        
+        self.driver.get("http://127.0.0.1:5000")
+        # Поиск и ождиание прогрузки ссылки элемента товара магазина и клик по ссылке
+        item_name = wait_of_element_located(by=By.ID, value='1', driver=self.driver)
+        item_name.click()
 
-    driver.close()
+        title_text = self.driver.find_element(by = By.CSS_SELECTOR, value="h1")
+        assert title_text.text=="First array"
 
 
-if __name__ == '__main__':
-    test_open_array()
+
+
+    def test_target_search(self):
+        
+        self.driver.get("http://127.0.0.1:5000")
+
+        # Поиск и ождиание прогрузки ссылки элемента товара магазина и клик по ссылке
+        item_name = wait_of_element_located(by=By.ID, value='1', driver=self.driver)
+        item_name.click()
+
+        target_field = wait_of_element_located(by=By.CLASS_NAME, value="form-control", driver=self.driver)
+        target_field.send_keys("3")
+        
+        submit_button = wait_of_element_located(by=By.ID, value="but", driver=self.driver)
+        submit_button.click()
+        
+        title_text = self.driver.find_element(by = By.CSS_SELECTOR, value="h2")
+        assert title_text.text=="Позиция: 2"
+
+    def test_array_delete(self):
+        
+        self.driver.get("http://127.0.0.1:5000")
+
+        # Поиск и ождиание прогрузки ссылки элемента товара магазина и клик по ссылке
+        item_name = wait_of_element_located(by=By.ID, value='1', driver=self.driver)
+        item_name.click()
+
+        target_field = wait_of_element_located(by=By.CLASS_NAME, value="form-control", driver=self.driver)
+        target_field.send_keys("3")
+        
+        submit_button = wait_of_element_located(by=By.ID, value="but", driver=self.driver)
+        submit_button.click()
+        
+        title_text = self.driver.find_element(by = By.CSS_SELECTOR, value="h2")
+        assert title_text.text=="Позиция: 2"
+
+        
+
+if __name__ == "__main__":
+    pytest.main()
