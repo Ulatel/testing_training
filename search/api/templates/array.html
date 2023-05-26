@@ -3,11 +3,12 @@
 {% block content %}
     <h1>{% block title %} {{ array['title'] }} {% endblock %}</h1>
     <span class="badge badge-primary">{{ array['created'] }}</span>
-    <a href="{{ url_for('edit', id=array['id']) }}">
+    <a href="{{ url_for('edit', id=array['id']) }}" id = "edit">
         <span class="badge badge-warning">Редактировать</span>
     </a>
     <form action="{{ url_for('delete', id=array['id']) }}" method="POST">
         <input type="submit" value="Удалить"
+                id = "delete"
                 class="btn btn-danger btn-sm"
                 onclick="return confirm('Ты действительно хочешь удалить этот великолепный массив?')">
     </form>
@@ -30,7 +31,7 @@
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-primary" id = "but">Подтвердить</button>
+            <button type="submit" class="btn btn-primary" id = "submit">Подтвердить</button>
         </div>
 
         <h2>{% block result %} Позиция: {{ target_pos }} {% endblock %}</h2>
