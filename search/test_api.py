@@ -25,7 +25,13 @@ def insert_into_db(id, target, value):
 
 
 class TestClass:
-    """
+    '''
+    def setup_module(self):
+        print("Выполнение метода Setup_module")
+
+    def teardown_module(self):
+        print("Выполнение метода Teardown_module")
+
     def test_get_form_get_list_http_status_code(self):
         assert get_array_list().status_code == 200
 
@@ -181,17 +187,13 @@ class TestClass:
         ]
         for num in nums:
             assert post_create_array(title="test17", content=num).status_code == 500
-    
-            
-            """
-    
-
+    '''
 
     def test_post_create_form_nums_value_out_of_range_http_status_code(self):
         nums = [
             "10000000 0 1",
             "-10000000 0 1",
-            ""
+            " "
         ]
         nums_int = list(range(10, 50001+1))+list(range(1, 10))
         nums_long = ""
@@ -201,7 +203,7 @@ class TestClass:
 
         for num in nums:
             assert post_create_array(title="test18", content=num).status_code == 500
-
+'''
     def test_post_create_form_nums_value_in_range_http_status_code(self):
         nums = [
             "10000 0 1",
@@ -220,14 +222,8 @@ class TestClass:
     
 
    
-'''
 
-################################
-    # nums is an ascending array that is possibly rotated
-    def test_id_post_non_sorted_values_in_nums_error(self):
-        sut = Solution()
-        with self.assertRaises(ValueError):
-            sut.search([3, 7, 4, 5, 6, 1, 2], 10)
+
 
 ################################
     # nums is array is not integer

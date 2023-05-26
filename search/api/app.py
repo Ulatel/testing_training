@@ -75,9 +75,11 @@ def create():
 
             if not title:
                 flash('Title is required!')
-            elif not content:
+            elif not content :
                 flash('Content is required!')
             else:
+                if len(content.split())<1:
+                    raise ValueError
                 nums = []
                 for num in content.split():
                     try:
