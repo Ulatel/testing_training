@@ -3,7 +3,7 @@
 {% block content %}
     <h1>{% block title %} Добро пожаловать в сортировальню {% endblock %}</h1>
     {% for array in arrays %}
-        <a href="{{ url_for('array', array_id=array['id']) }}">
+        <a href="{{ url_for('array', array_id=array['id']) }}", id ="{{array['id']}}" >
             <h2>{{ array['title'] }}</h2>
         </a>
         <span class="badge badge-primary">{{ array['created'] }}</span>
