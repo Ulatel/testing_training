@@ -79,36 +79,45 @@ def create():
                 flash('Content is required!')
             else:
                 if len(content.split())<1:
-                    raise ValueError
+                    flash('Надо не пустую!')
+                    #raise ValueError
                 nums = []
                 for num in content.split():
                     try:
                         a = int(num)
                     except TypeError as error:
+                        flash('не число....!')
                         raise 
                     nums.append(a)
 
                 if all(nums[i] <= nums[i+1] for i in range(nums.index(min(nums)) - 1)) != True or  all(nums[j] <= nums[j+1] for j in range(nums.index(min(nums)), len(nums)-1)) != True:
-                    raise ValueError
+                    
+                    flash('не сортировано...!')
+                    #raise ValueError
 
-                if len(nums) < 1 :
-                    raise ValueError
+                elif len(nums) < 1 :
+                    flash('не пустую...!')
+                    #raise ValueError
                 
-                if  len(nums) > 5000:
-                    raise ValueError
+                elif  len(nums) > 5000:
+                    flash('сильно длинно!')
+                    #raise ValueError
 
-                if max(nums) > 10000 or min(nums) < -10000:
-                    raise ValueError
+                elif max(nums) > 10000 or min(nums) < -10000:
+                    flash('плохие значения!')
+                    #raise ValueError
                 
-                if len(nums) != len(set(nums)):
-                    raise ValueError
+                elif len(nums) != len(set(nums)):
+                    flash('надо шоб уникально в числах было...!')
+                    #raise ValueError
                 
-                conn = get_db_connection()
-                conn.execute('INSERT INTO arrays (title, content) VALUES (?, ?)',
-                            (title, content))
-                conn.commit()
-                conn.close()
-                return redirect(url_for('index'))
+                else:
+                    conn = get_db_connection()
+                    conn.execute('INSERT INTO arrays (title, content) VALUES (?, ?)',
+                                (title, content))
+                    conn.commit()
+                    conn.close()
+                    return redirect(url_for('index'))
     except  Exception as error:
         flash(repr(error))
         print('An exception occurred: {}'.format(error.with_traceback))
