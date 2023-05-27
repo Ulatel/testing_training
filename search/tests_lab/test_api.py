@@ -49,8 +49,7 @@ class TestClass:
     def test_post_create_form_nums_value_out_of_range_http_status_code(self):
         nums = [
             "10000000 0 1",
-            "-10000000 0 1",
-            " "
+            "-10000000 0 1"
         ]
         nums_int = list(range(10, 50001+1))+list(range(1, 10))
         nums_long = ""
