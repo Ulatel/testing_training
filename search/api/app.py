@@ -138,15 +138,51 @@ def edit(id):
 
             if not title:
                 flash('Title is required!')
+            elif not content :
+                flash('Content is required!')
             else:
-                conn = get_db_connection()
-                conn.execute('UPDATE arrays SET title = ?, content = ?'
-                            ' WHERE id = ?',
-                            (title, content, id))
-                conn.commit()
-                conn.close()
-                array = get_array(id)
-                return render_template('array.html', array=array)
+                if len(content.split())<1:
+                    flash('Надо не пустую!')
+                    #raise ValueError
+                nums = []
+                for num in content.split():
+                    try:
+                        a = int(num)
+                    except TypeError as error:
+                        flash('не число....!')
+                        raise 
+                    nums.append(a)
+
+                if all(nums[i] <= nums[i+1] for i in range(nums.index(min(nums)) - 1)) != True or  all(nums[j] <= nums[j+1] for j in range(nums.index(min(nums)), len(nums)-1)) != True:
+                    
+                    flash('не сортировано...!')
+                    #raise ValueError
+
+                elif len(nums) < 1 :
+                    flash('не пустую...!')
+                    #raise ValueError
+                
+                elif  len(nums) > 5000:
+                    flash('сильно длинно!')
+                    #raise ValueError
+
+                elif max(nums) > 10000 or min(nums) < -10000:
+                    flash('плохие значения!')
+                    #raise ValueError
+                
+                elif len(nums) != len(set(nums)):
+                    flash('надо шоб уникально в числах было...!')
+                    #raise ValueError
+                
+                else:
+                    conn = get_db_connection()
+                    conn.execute('UPDATE arrays SET title = ?, content = ?'
+                                ' WHERE id = ?',
+                                (title, content, id))
+                    conn.commit()
+                    conn.close()
+                    array = get_array(id)
+                    return render_template('array.html', array=array)
     except  Exception  as error:
         flash(repr(error))
         print('An exception occurred: {}'.format(error.with_traceback))
