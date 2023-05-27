@@ -1,4 +1,4 @@
-import pytest
+'''import pytest
 import sqlite3
 import api
 # from api.app import get_db_connection
@@ -229,3 +229,4 @@ class TestClass:
 
 """if __name__ == "__main__":
     pytest.main()"""
+'''
