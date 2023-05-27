@@ -1,7 +1,7 @@
 import sqlite3
-import traceback
+import unittest
 import logging
-from solution import Solution
+from api.solution import Solution
 from flask import Flask, render_template, request, url_for, flash, redirect
 '''Глобальный объект request для доступа к входящим данным запроса, которые будут подаваться через форму HTML.
 Функция url_for() для генерирования URL-адресов.
