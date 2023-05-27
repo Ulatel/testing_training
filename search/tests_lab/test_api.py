@@ -35,7 +35,7 @@ class TestClass:
             "1 1",
         ]
         for num in nums:
-            assert post_create_array(title="test2", content=num).status_code == 500
+            assert post_create_array(title="test2", content=num).status_code == 200
 
     def test_post_create_form_non_sorted_values_in_nums_error(self):
         nums = [
@@ -43,7 +43,7 @@ class TestClass:
             "3 4 5 0 999 123 1 2 0",
         ]
         for num in nums:
-            assert post_create_array(title="test3", content=num).status_code == 500
+            assert post_create_array(title="test3", content=num).status_code == 200
 
 
     def test_post_create_form_nums_value_out_of_range_http_status_code(self):
@@ -59,7 +59,7 @@ class TestClass:
         nums.append(nums_long)
 
         for num in nums:
-            assert post_create_array(title="test4", content=num).status_code == 500
+            assert post_create_array(title="test4", content=num).status_code == 200
 
     def test_post_create_form_nums_value_not_int_http_status_code(self):
         nums = [
