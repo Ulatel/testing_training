@@ -2,6 +2,16 @@
 
 {% block content %}
     <h1>{% block title %} Добро пожаловать в сортировальню {% endblock %}</h1>
+    <form method="post">
+        <div class="form-group">
+            <label for="year">Время создания массива</label>
+            <textarea name="year" placeholder="2024-01-01 10:16:01"
+                    class="form-control">{{ request.form['year'] }}</textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Подтвердить</button>
+        </div>
+    </form>
     {% for array in arrays %}
         <a href="{{ url_for('array', array_id=array['id']) }}", id ="{{array['id']}}" >
             <h2>{{ array['title'] }}</h2>

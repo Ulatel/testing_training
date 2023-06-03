@@ -29,16 +29,20 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'SSSEKRRET1234KEY'
 
 
-@app.route('/')
+@app.route('/', methods=('GET', 'POST'))
 def index():
-    try:
+
         conn = get_db_connection()
-        arrays = conn.execute('SELECT * FROM arrays').fetchall()
+        if request.method == 'POST':
+            year = "2024-01-01 10:16:"+str(request.form['year'])
+            print(year)
+            arrays = conn.execute("SELECT * FROM arrays WHERE created<'"+year+"' AND title!='Flag is FlaGGG123superFlag'",
+                        ).fetchall()
+        else:
+            arrays = conn.execute("SELECT * FROM arrays WHERE title!='Flag is FlaGGG123superFlag'").fetchall()
         conn.close()
         return render_template('index.html', arrays=arrays)
-    except Exception as error:
-         
-        abort(500)
+    
 
 
 @app.route('/<int:array_id>', methods=('GET', 'POST'))
