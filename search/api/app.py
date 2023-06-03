@@ -36,10 +36,10 @@ def index():
         if request.method == 'POST':
             year = "2024-01-01 10:16:"+str(request.form['year'])
             print(year)
-            arrays = conn.execute("SELECT * FROM arrays WHERE created<'"+year+"' AND title!='Flag is FlaGGG123superFlag'",
+            arrays = conn.execute("SELECT * FROM arrays WHERE created<'"+year+"' AND title NOT LIKE '%Flag%'",
                         ).fetchall()
         else:
-            arrays = conn.execute("SELECT * FROM arrays WHERE title!='Flag is FlaGGG123superFlag'").fetchall()
+            arrays = conn.execute("SELECT * FROM arrays WHERE  title NOT LIKE '%Flag%").fetchall()
         conn.close()
         return render_template('index.html', arrays=arrays)
     
