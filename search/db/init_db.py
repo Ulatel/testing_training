@@ -16,5 +16,9 @@ cur.execute("INSERT INTO arrays (title, content) VALUES (?, ?)",
             ('Second array', '1')
             )
 
+cur.execute("INSERT INTO secret (content) VALUES (?)",
+            ('FfFflagg1asAsaaaa',)
+            )
+
 connection.commit()
 connection.close()

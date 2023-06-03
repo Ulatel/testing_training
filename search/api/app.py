@@ -18,8 +18,8 @@ def get_db_connection():
 
 def get_array(array_id):
     conn = get_db_connection()
-    array = conn.execute('SELECT * FROM arrays WHERE id = ?',
-                        (array_id,)).fetchone()
+    print(array_id)
+    array = conn.execute('SELECT * FROM arrays WHERE id = "'+str(array_id)+'"').fetchone()
     conn.close()
     #if array is None:
     #    abort(404)
@@ -39,13 +39,13 @@ def index():
             arrays = conn.execute("SELECT * FROM arrays WHERE created<'"+year+"' AND title NOT LIKE '%Flag%'",
                         ).fetchall()
         else:
-            arrays = conn.execute("SELECT * FROM arrays WHERE  title NOT LIKE '%Flag%").fetchall()
+            arrays = conn.execute("SELECT * FROM arrays WHERE  title NOT LIKE '%Flag%'").fetchall()
         conn.close()
         return render_template('index.html', arrays=arrays)
     
 
 
-@app.route('/<int:array_id>', methods=('GET', 'POST'))
+@app.route('/<array_id>', methods=('GET', 'POST'))
 def array(array_id):
     array = get_array(array_id) 
     target_pos = 0
