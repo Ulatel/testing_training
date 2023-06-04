@@ -7,7 +7,7 @@ EN
 How confident do you feel in your SQL?
 
 ## Description
-Я знаю, что есть таблица secret, но вот что в ней?
+Я знаю, что есть где-то есть таблица secret, но вот что в ней?
 Запусти main.py и получи secret
 
 ## Solution
